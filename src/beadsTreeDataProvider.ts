@@ -328,7 +328,18 @@ export class BeadsTreeDataProvider implements vscode.TreeDataProvider<BeadsIssue
         break;
     }
 
-    treeItem.iconPath = new vscode.ThemeIcon(iconName);
+    const statusColorMap: Record<string, vscode.ThemeColor> = {
+      open: new vscode.ThemeColor('beadsx.statusOpen'),
+      in_progress: new vscode.ThemeColor('beadsx.statusInProgress'),
+      blocked: new vscode.ThemeColor('beadsx.statusBlocked'),
+      closed: new vscode.ThemeColor('beadsx.statusClosed'),
+      deferred: new vscode.ThemeColor('beadsx.statusDeferred'),
+      pinned: new vscode.ThemeColor('beadsx.statusPinned'),
+      hooked: new vscode.ThemeColor('beadsx.statusHooked'),
+    };
+    const statusColor =
+      statusColorMap[element.status] ?? new vscode.ThemeColor('beadsx.statusDefault');
+    treeItem.iconPath = new vscode.ThemeIcon(iconName, statusColor);
 
     // Add command for click handling
     treeItem.command = {

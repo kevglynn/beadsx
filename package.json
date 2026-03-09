@@ -66,6 +66,48 @@
         }
       ]
     },
+    "colors": [
+      {
+        "id": "beadsx.statusOpen",
+        "description": "Color for open issues in the tree view",
+        "defaults": { "dark": "#89d185", "light": "#388a34" }
+      },
+      {
+        "id": "beadsx.statusInProgress",
+        "description": "Color for in-progress issues in the tree view",
+        "defaults": { "dark": "#75beff", "light": "#0078d4" }
+      },
+      {
+        "id": "beadsx.statusBlocked",
+        "description": "Color for blocked issues in the tree view",
+        "defaults": { "dark": "#f48771", "light": "#a1260d" }
+      },
+      {
+        "id": "beadsx.statusClosed",
+        "description": "Color for closed issues in the tree view",
+        "defaults": { "dark": "#858585", "light": "#6e6e6e" }
+      },
+      {
+        "id": "beadsx.statusDeferred",
+        "description": "Color for deferred issues in the tree view",
+        "defaults": { "dark": "#cca700", "light": "#bf8803" }
+      },
+      {
+        "id": "beadsx.statusPinned",
+        "description": "Color for pinned issues in the tree view",
+        "defaults": { "dark": "#b180d7", "light": "#652d90" }
+      },
+      {
+        "id": "beadsx.statusHooked",
+        "description": "Color for hooked (agent-attached) issues in the tree view",
+        "defaults": { "dark": "#4ec9b0", "light": "#16825d" }
+      },
+      {
+        "id": "beadsx.statusDefault",
+        "description": "Fallback color for unknown or custom status values in the tree view",
+        "defaults": { "dark": "#d7ba7d", "light": "#946c00" }
+      }
+    ],
     "configuration": {
       "title": "BeadsX Extension",
       "properties": {
