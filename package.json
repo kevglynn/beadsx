@@ -163,6 +163,7 @@
   },
   "dependencies": {
     "commander": "^14.0.2",
+    "marked": "^17.0.4",
     "yaml": "^2.8.2"
   }
 }

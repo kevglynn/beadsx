@@ -23,6 +23,36 @@ const escapeHtml = (str: string) =>
     .replace(/"/g, '&quot;')
     .replace(/'/g, '&#039;');
 
+// Markdown renderer for detail view descriptions
+// Uses lazy initialization to avoid ESM/CJS import issues at module load time.
+// esbuild bundles the ESM 'marked' package into CJS at build time.
+let markedInstance: { parse(src: string): string | Promise<string> } | null = null;
+
+function getMarked(): typeof markedInstance {
+  if (!markedInstance) {
+    try {
+      // eslint-disable-next-line @typescript-eslint/no-require-imports
+      const { Marked } = require('marked') as { Marked: new (opts: object) => typeof markedInstance };
+      markedInstance = new Marked({ breaks: true, gfm: true });
+    } catch {
+      return null;
+    }
+  }
+  return markedInstance;
+}
+
+function renderMarkdown(text: string): string {
+  const md = getMarked();
+  if (!md) return escapeHtml(text);
+  try {
+    const result = md.parse(text);
+    if (typeof result === 'string') return result;
+    return escapeHtml(text);
+  } catch {
+    return escapeHtml(text);
+  }
+}
+
 // Date formatting for detail view (module-level to avoid recreation per call)
 const formatDetailDate = (dateStr: string) => {
   try {
@@ -222,6 +252,79 @@ function getDetailHtml(issue: BeadsIssue, ancestors: BeadsIssue[], children: Bea
       font-family: var(--vscode-editor-font-family);
       font-size: var(--vscode-editor-font-size);
     }
+    .section-content.markdown-body {
+      white-space: normal;
+      font-family: var(--vscode-font-family);
+      line-height: 1.6;
+    }
+    .markdown-body h1, .markdown-body h2, .markdown-body h3,
+    .markdown-body h4, .markdown-body h5, .markdown-body h6 {
+      margin-top: 16px;
+      margin-bottom: 8px;
+      color: var(--vscode-foreground);
+    }
+    .markdown-body h1 { font-size: 1.4em; }
+    .markdown-body h2 { font-size: 1.2em; }
+    .markdown-body h3 { font-size: 1.1em; }
+    .markdown-body p {
+      margin: 8px 0;
+    }
+    .markdown-body ul, .markdown-body ol {
+      padding-left: 24px;
+      margin: 8px 0;
+    }
+    .markdown-body li {
+      margin: 4px 0;
+    }
+    .markdown-body code {
+      font-family: var(--vscode-editor-font-family);
+      font-size: var(--vscode-editor-font-size);
+      background-color: var(--vscode-textCodeBlock-background);
+      padding: 2px 5px;
+      border-radius: 3px;
+    }
+    .markdown-body pre {
+      background-color: var(--vscode-textCodeBlock-background);
+      padding: 12px;
+      border-radius: 4px;
+      overflow-x: auto;
+      margin: 8px 0;
+    }
+    .markdown-body pre code {
+      background: none;
+      padding: 0;
+    }
+    .markdown-body blockquote {
+      border-left: 3px solid var(--vscode-textBlockQuote-border);
+      padding-left: 12px;
+      margin: 8px 0;
+      color: var(--vscode-descriptionForeground);
+    }
+    .markdown-body a {
+      color: var(--vscode-textLink-foreground);
+    }
+    .markdown-body a:hover {
+      color: var(--vscode-textLink-activeForeground);
+    }
+    .markdown-body table {
+      border-collapse: collapse;
+      margin: 8px 0;
+      width: 100%;
+    }
+    .markdown-body th, .markdown-body td {
+      border: 1px solid var(--vscode-panel-border);
+      padding: 6px 10px;
+      text-align: left;
+    }
+    .markdown-body th {
+      background-color: var(--vscode-editor-background);
+      font-weight: 600;
+    }
+    .markdown-body hr {
+      border: none;
+      border-top: 1px solid var(--vscode-panel-border);
+      margin: 16px 0;
+    }
     .labels {
       display: flex;
       gap: 4px;
@@ -352,7 +455,7 @@ function getDetailHtml(issue: BeadsIssue, ancestors: BeadsIssue[], children: Bea
       ? `
   <div class="section">
     <div class="section-title">Description</div>
-    <div class="section-content">${escapeHtml(issue.description)}</div>
+    <div class="section-content markdown-body">${renderMarkdown(issue.description)}</div>
   </div>
   `
       : ''
