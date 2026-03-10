@@ -7,11 +7,22 @@ export interface BeadsDependency {
   created_at: string;
 }
 
-// Issue status values (tombstone = soft-deleted, should be filtered out of views)
-export type IssueStatus = 'open' | 'in_progress' | 'blocked' | 'closed' | 'tombstone';
+// Issue status values
+// Core: open, in_progress, blocked, closed
+// Extended: deferred (postponed), pinned (persistent), hooked (agent-attached)
+// Internal: tombstone (soft-deleted, filtered out of views)
+export type IssueStatus =
+  | 'open'
+  | 'in_progress'
+  | 'blocked'
+  | 'closed'
+  | 'deferred'
+  | 'pinned'
+  | 'hooked'
+  | 'tombstone';
 
 // Issue type values
-export type IssueType = 'bug' | 'feature' | 'epic' | 'chore' | 'task';
+export type IssueType = 'bug' | 'feature' | 'epic' | 'chore' | 'task' | 'question' | 'docs';
 
 export interface BeadsIssue {
   id: string;
