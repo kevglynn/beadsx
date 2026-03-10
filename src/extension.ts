@@ -197,6 +197,18 @@ function getDetailHtml(issue: BeadsIssue, ancestors: BeadsIssue[], children: Bea
       background-color: var(--vscode-descriptionForeground);
       color: var(--vscode-editor-background);
     }
+    .status-deferred {
+      background-color: var(--vscode-charts-yellow);
+      color: var(--vscode-editor-background);
+    }
+    .status-pinned {
+      background-color: var(--vscode-charts-purple);
+      color: var(--vscode-editor-background);
+    }
+    .status-hooked {
+      background-color: var(--vscode-terminal-ansiCyan);
+      color: var(--vscode-editor-background);
+    }
     .type-badge {
       display: inline-block;
       padding: 2px 8px;
@@ -286,6 +298,18 @@ function getDetailHtml(issue: BeadsIssue, ancestors: BeadsIssue[], children: Bea
     }
     .child-status-closed {
       background-color: var(--vscode-descriptionForeground);
+      color: var(--vscode-editor-background);
+    }
+    .child-status-deferred {
+      background-color: var(--vscode-charts-yellow);
+      color: var(--vscode-editor-background);
+    }
+    .child-status-pinned {
+      background-color: var(--vscode-charts-purple);
+      color: var(--vscode-editor-background);
+    }
+    .child-status-hooked {
+      background-color: var(--vscode-terminal-ansiCyan);
       color: var(--vscode-editor-background);
     }
     .child-title {
